@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <p>
+        <p>
+            {% for e in error %}
+                <font color=red>{{ e }}</font>
+                <br>
+            {% endfor %}
+
+        <p>
+        <p>
+
+            <button class="btn btn-danger" onclick="setTest()">先试用帐号</button>
+            <script>
+                //设置试用收号为test并且提交
+                function setTest() {
+                    $("#username").val("test");
+                    $("#form").attr("action", "/notebook/user/login");
+                    $("#form").submit();
+                }
+            </script>
+
+            <form class="form-horizontal" id="form" name="userReg" method="post" action="/notebook/user/reg">
+            <div class="form-group">
+                <h3><label>用户注册</label></h3>
+            </div>
+        <p>
+        
+        <div class="form-group">
+        <label for="username">请输入用户名:</label>
+        <input required="required" class="form-control" type="text" name=username id=username value="" placeholder="设置一个用户名">
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="password">请设置密码:</label>
+            <input class="form-control" id="password" type="password" name="password" value="" placeholder="最好设置一个密码^_^">
+        </div>
+
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit" name="Submit">提交注册</button>
+            <a href=/notebook/user/login>已有用户名?立即前往登录</a>
+        </div>
+
+        </form>
+
+    </div>
+    <div class="col-xs-2 col-sm-3 col-md-4 col-lg-4"></div>
+{% endblock %}
+

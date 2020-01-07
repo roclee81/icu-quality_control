@@ -1,0 +1,40 @@
+
+<nav class="navbar navbar-default">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">重症医学在线质控系统</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+{#        <li class="active"><a href="/">首页<span class="sr-only">(current)</span></a></li>#}
+        <li ><a href="/icu/">首页<span class="sr-only">(current)</span></a></li>
+        <li ><a href="/icu/qc/list/">重症医学质量控制<span class="sr-only">(current)</span></a></li>
+        <li ><a href="/icu/tools/apacheII/list/">Apache II 评分工具<span class="sr-only">(current)</span></a></li>
+        <li ><a href="/icu/other_tools">其它工具<span class="sr-only">(current)</span></a></li>
+        <li ><a href="/icu/help">使用帮助<span class="sr-only">(current)</span></a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {% if request.session.user %}
+            <li class="active"><a href="/notebook/user/info">欢迎:{{ request.session.user }}</a></li>
+            <li><a href="/notebook/user/logout">退出</a></li>
+        {% else %}
+            <li><a href="/notebook/user/info">欢迎:游客</a></li>
+            <li><a href="/notebook/user/login">登录</a></li>
+        {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+
+</nav>
+
+
+
+  
+

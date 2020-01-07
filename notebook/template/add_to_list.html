@@ -1,0 +1,37 @@
+{% load dhs_tags %}
+<li id="li_{{ note.id }}" ondragstart="dragStart(event,this)" ondragend="dragEnd(event,this)" draggable="true">
+    {% ifequal note.note_type 0 %}
+        <div class="row dir" id="div_{{ note.id }}" onclick="retrieve(this,'{{ note.id }}')">
+            <div class="open btn_tree" style="float:left"></div>
+            <div class="pack btn_tree" style="float:left"></div>
+            <div class="dir" style="float:left" id="title_{{ note.id }}"
+                 title="{{ note.title }}">{{ note.title|truncate_by_len:16 }}</div>
+            <div title="新建目录" onclick="form_note_create(this,'{{ note.id }}',0)" class="add_dir btn_tree"
+                 style="float:left"></div>
+            <div title="新建笔记" onclick="form_note_create(this,'{{ note.id }}',1)" class="add_note btn_tree"
+                 style="float:left"></div>
+        </div>
+    {% endifequal %}
+
+    {% ifequal note.note_type 1 %}
+        <div class="row note" id="div_{{ note.id }}" onclick="retrieve(this,'{{ note.id }}')">
+            <div class="file btn_tree" style="float:left"></div>
+            <div style="float:left" id="title_{{ note.id }}"
+                 title="{{ note.title }}">{{ note.title|truncate_by_len:16 }}</div>
+        </div>
+    {% endifequal %}
+
+    {% ifequal note.note_type 10 %}
+        <div class="row dir" id="div_{{ note.id }}" onclick="retrieve(this,'{{ note.id }}')">
+            <div class="open btn_tree" style="float:left"></div>
+            <div class="recycle_bin btn_tree" style="float:left"></div>
+            <div class="dir" style="float:left" id="title_{{ note.id }}">{{ note.title|truncate_by_len:18 }}</div>
+        </div>
+    {% endifequal %}
+
+
+    <ul ondragenter="dragEnter(event,this)" ondragleave="dragLeave(event,this)" ondrop="drop(event,this)"
+        ondragover="dragOver(event,this)" class="ful none" id="ul_{{ note.id }}">
+    </ul>
+
+</li>

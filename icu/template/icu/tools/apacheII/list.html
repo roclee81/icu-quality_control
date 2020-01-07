@@ -1,0 +1,108 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+{#    <a href=/icu/tools/apacheII>#}
+{#        <button class="btn btn-info"> 返回ApacheII量表主页面</button>#}
+{#    </a>#}
+    <a href=/icu/tools/apacheII/add>
+        <button class="btn btn-info"> 新增加一个ApacheII量表</button>
+    </a>
+{#    <a href=/icu/qc>#}
+{#        <button class="btn btn-info"> 直达ICU质控主页面</button>#}
+{#    </a>#}
+    <hr/>
+
+
+
+    {# 下载数据链接 #}
+    <div align=right>
+        <a href=/icu/tools/apacheII/download/all>
+                <button class="btn btn-success btn-xs">下载所有数据</button>
+        </a>
+    </div>
+
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>id</td>
+            <td>住院号</td>
+            <td>床号</td>
+            <td width="60px">姓名</td>
+            <td>年龄</td>
+            <td>分值</td>
+            <td>死亡率</td>
+            <td>非手术类疾病</td>
+            <td>手术类疾病</td>
+            <td>急诊术后</td>
+            <td width="60px">医生</td>
+            <td width="90px">评分时间</td>
+            <td width="70px">下载</td>
+            <td width="40px">查看</td>
+            <td width="40px">修改</td>
+        </tr>
+
+        {% for p in patients %}
+            <tr>
+                {# 相加乘以-1#}
+                <td>{% widthratio forloop.counter|add:start 1 -1 %}</td>
+                <td>{{ p.inNumber }}</td>
+                <td>{{ p.bedNumber }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.age }}</td>
+                <td>{{ p.score }}</td>
+                <td>{{ p.deathRate }}</td>
+                <td>{{ p.noSurgery }}</td>
+                <td>{{ p.surgery }}</td>
+                <td>{{ p.afterSurgery }}</td>
+                <td>{{ p.doctor }}</td>
+                <td>{{ p.scoreTime|date:'Y-m-d' }}</td>
+                <td><a target=_blank href="/icu/tools/apacheII/download/id/{{ p.id }}">点此下载</a></td>
+                <td><a href="/icu/tools/apacheII/retrieve/{{ p.id }}">查看</a></td>
+                <td><a href="/icu/tools/apacheII/update/{{ p.id }}">修改</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+    {#分页器#}
+    <ul>
+        {#上一页按钮开始#}
+        {# 如果当前页有上一页#}
+        {% if patients.has_previous %}
+            {#  当前页的上一页按钮正常使用#}
+            <li style="display:inline"><a href="{{ patients.previous_page_number }}">上一页</a></li>
+        {% else %}
+            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+            <li style="display:inline">上一页</li>
+        {% endif %}
+        {#上一页按钮结束#}
+        {# 页码开始#}
+        {% for num in page_range %}
+
+            {% if num == patients.number %}
+                <li style="display:inline">{{ num }}</li>
+            {% else %}
+                <li style="display:inline"><a href="{{ num }}">{{ num }}</a></li>
+
+            {% endif %}
+        {% endfor %}
+        {#页码结束#}
+        {# 下一页按钮开始#}
+        {% if patients.has_next %}
+            <li style="display:inline"><a href="{{ patients.next_page_number }}">下一页</a></li>
+        {% else %}
+            <li style="display:inline">下一页</li>
+        {% endif %}
+        {# 下一页按钮结束#}
+    </ul>
+
+
+    <script src=/static/js/echarts.min.js></script>
+    {% for echart in echarts %}
+        {{ echart | safe }}
+    {% endfor %}
+
+
+
+{% endblock %}
+
+

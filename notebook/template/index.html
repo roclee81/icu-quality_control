@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="col-md-4" id="left">{% include 'left.html' %}</div>
+    <div class="col-md-8 main" id="main">
+
+<div id=scroll style="position:relative;overflow:auto;">
+    <p>&nbsp;<p>&nbsp;
+    <p>&nbsp;<p>&nbsp;
+    <p> <h4>
+        {{sentence|safe}}
+    </h4></p>
+</div>
+
+    </div>
+{% endblock %}
+
+

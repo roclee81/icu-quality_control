@@ -1,0 +1,305 @@
+{% extends 'icu/tools/base.html' %}
+{% block content %}
+
+    <a href=/icu/qc>
+        <button class="btn btn-info">返回质控主页面</button>
+    </a>
+    <a href=/icu/qc/list>
+        <button class="btn btn-info">显示质控数据列表</button>
+    </a>
+    <a href=/icu/qc/report>
+        <button class="btn btn-info">质控报表</button>
+    </a>
+    <a href=/icu/tools/apacheII>
+        <button class="btn btn-info">直达ApacheII量表主页面</button>
+    </a>
+    <hr/>
+
+
+
+    <style type="text/css">
+        input {
+            width: 42px;
+            color: red;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            text-align: right; /* 这句话是对齐的关键 */
+            color: #999;
+        }
+
+        .toolbar {
+            border: 1px solid #ccc;
+            width: 300px;
+        }
+
+        .text {
+            border: 1px solid #ccc;
+            height: 100px;
+            width: 300px;
+        }
+
+        .yesterday {
+            width: 10px;
+            display: inline-block;
+        }
+    </style>
+
+    <form id=qualityControl action="" method=post>
+
+        ICU在线质控表
+
+        <label>质控日期:</label>
+        <input style="width:220px" type="date" name="qcDate" id=qcDate value="{{ qcDate }}"/>
+
+        <a href="{{ yesterday|date:"Y-m-d" }}">前一日</a>
+        <a href="{{ tomorrow|date:"Y-m-d" }}">后一日</a>
+
+        <br/>
+        患者数统计及前一日对比:
+        <div id=qcInfo style="width:50px;display:inline-block"></div>
+        <br/>
+        <label>今晨总人数:</label>
+        <input type="text" name=total id=total value="{{ qc.total }}">
+        <div class=yesterday id=y_total>{{ qc_y.total }}</div>
+        <br/>
+        <label>昨总入科:</label>
+        <input type="text" name=entry id=entry value="{{ qc.entry }}">
+        <div class=yesterday></div>
+        <label>门急诊转入:</label>
+        <input type="text" name=outpatient id=outpatient value="{{ qc.outpatient }}">
+        <div class=yesterday></div>
+        <label>病房转入:</label>
+        <input type="text" name=shiftIn id=shiftIn value="{{ qc.shiftIn }}">
+        <div class=yesterday></div>
+        <label>非计划转入:</label>
+        <input type="text" name=unplannedShift id=unplannedShift value="{{ qc.unplannedShift }}">
+        <div class=yesterday></div>
+        <label>48h重返:</label>
+        <input type="text" name=revert id=revert value="{{ qc.revert }}">
+        <div class=yesterday></div>
+        <br/>
+        <label>昨总出科:</label>
+        <input type="text" name=out id=out value="{{ qc.out }}">
+        <div class=yesterday></div>
+        <label>转出他科:</label>
+        <input type="text" name=transfer id=transfer value="{{ qc.transfer }}">
+        <div class=yesterday></div>
+        <label>好转出院:</label>
+        <input type="text" name=improve id=improve value="{{ qc.improve }}">
+        <div class=yesterday></div>
+        <label>治愈出院:</label>
+        <input type="text" name=cure id=cure value="{{ qc.cure }}">
+        <div class=yesterday></div>
+        <label>自动出院:</label>
+        <input type="text" name=automaticDischarge id=automaticDischarge value="{{ qc.automaticDischarge }}">
+        <div class=yesterday></div>
+        <label>死亡:</label>
+        <input type="text" name=death id=death value="{{ qc.death }}">
+        <div class=yesterday></div>
+
+        <br/>
+        <label>机械通气数:</label>
+        <input type="text" name=ventilation id=ventilation value="{{ qc.ventilation }}">
+        <div class=yesterday id=y_ventilation>{{ qc_y.ventilation }}</div>
+        <label>新增VAP:</label>
+        <input type="text" name=newVAP id=newVAP value="{{ qc.newVAP }}">
+        <div class=yesterday></div>
+
+        <br/>
+        <label>新气管插管:</label>
+        <input type="text" name=newTracheaCannula id=newTracheaCannula value="{{ qc.newTracheaCannula }}">
+        <div class=yesterday></div>
+        <label>非计划拨管:</label>
+        <input type="text" name=unplannedExtubation id=unplannedExtubation value="{{ qc.unplannedExtubation }}">
+        <div class=yesterday></div>
+        <label>48h再插管:</label>
+        <input type="text" name=reintubation id=reintubation value="{{ qc.reintubation }}">
+        <div class=yesterday></div>
+
+
+        <br/>
+        <label>血流导管总数:</label>
+        <input type="text" name=AVCatheter id=AVCatheter value="{{ qc.AVCatheter }}">
+        <div class=yesterday id=y_AVCatheter>{{ qc_y.AVCatheter }}</div>
+        <label>新血流感染:</label>
+        <input type="text" name=CRBSI id=CRBSI value="{{ qc.CRBSI }}">
+        <div class=yesterday></div>
+
+        <br/>
+        <label>导尿管总数:</label>
+        <input type="text" name=urethralCatheter id=urethralCatheter value="{{ qc.urethralCatheter }}">
+        <div class=yesterday id=y_urethralCatheter>{{ qc_y.urethralCatheter }}</div>
+        <label>新尿管感染:</label>
+        <input type="text" name=CAUTI id=CAUTI value="{{ qc.CAUTI }}">
+        <div class=yesterday></div>
+
+        <br/>
+        <label>感染性休克:</label>
+        <input type="text" name=septicShock id=septicShock value="{{ qc.septicShock }}">
+        <div class=yesterday></div>
+        <label>3hBundle:</label>
+        <input type="text" name=bundle3 id=bundle3 value="{{ qc.bundle3 }}">
+        <div class=yesterday></div>
+        <label>6hBundle:</label>
+        <input type="text" name=bundle6 id=bundle6 value="{{ qc.bundle6 }}">
+        <div class=yesterday></div>
+
+        <br/>
+        <label>新增抗生素:</label>
+        <input type="text" name=antibiotic id=antibiotic value="{{ qc.antibiotic }}">
+        <div class=yesterday></div>
+        <label>标本培养:</label>
+        <input type="text" name=sample id=sample value="{{ qc.sample }}">
+        <div class=yesterday></div>
+
+        <br/>
+        <label>新增DVT预防:</label>
+        <input type="text" name=preventDVT id=preventDVT value="{{ qc.preventDVT }}">
+        <div class=yesterday></div>
+        <label>新发DVT数:</label>
+        <input type="text" name=newDVT id=newDVT value="{{ qc.newDVT }}">
+        <div class=yesterday></div>
+
+        <label>
+            <input id=submitButton type="button" onclick="submitInfo()" value="提交"/>
+        </label>
+        <label>
+            <input id=reset type="reset" value="重置"/>
+        </label>
+
+        <br/>
+        <label>备注日志:</label>
+        <input type="hidden" id=comments value="{{ qc.comments|safe }}" name="comments"/>
+
+        <div class=toolbar id=toolbar></div>
+        <div class=text id=text>{{ qc.comments|safe }}</div>
+
+
+    </form>
+
+
+    <script type="text/javascript" src="/static/wangEditor/wangEditor.min.js"></script>
+    <script type="text/javascript">
+        //富文本设置
+        var E = window.wangEditor;
+        var editor = new E('#toolbar', '#text');
+        // 自定义菜单配置
+        editor.customConfig.menus = ['head', 'bold', 'italic', 'foreColor', 'backColor', 'emoticon'];
+        var $comments = $('#comments');
+        //关闭粘贴样式的过滤
+        //editor.customConfig.pasteFilterStyle = false
+        editor.customConfig.onchange = function (html) {
+            $comments.val(html);
+        }
+        editor.create();
+
+    </script>
+
+
+    <script>
+        //日期选择框更改事件，ajax提取前一日的质控数据
+        $("#qcDate").change(
+            function () {
+                //如果选择了一个日期，进行ajax
+                if ($("#qcDate").val() != "") {
+                    var qcDate = $("#qcDate").val();
+                    var url = "/icu/qc/edit/" + qcDate;
+                    window.location.replace(url);
+                }//ends of if
+
+            }//ends of func
+        );
+
+
+        //验证数据
+        function checkInfo() {
+            //若存在出错信息
+            var error = ""
+
+            var total = parseInt($("#total").val()) || 0
+            var y_total = parseInt($("#y_total").html()) || 0
+            var entry = parseInt($("#entry").val()) || 0
+            var out = parseInt($("#out").val()) || 0
+
+            var outpatient = parseInt($("#outpatient").val()) || 0
+            var shiftIn = parseInt($("#shiftIn").val()) || 0
+
+
+            var transfer = parseInt($("#transfer").val()) || 0
+            var improve = parseInt($("#improve").val()) || 0
+            var cure = parseInt($("#cure").val()) || 0
+            var automaticDischarge = parseInt($("#automaticDischarge").val()) || 0
+            var death = parseInt($("#death").val()) || 0
+
+            var antibiotic = parseInt($("#antibiotic").val()) || 0
+            var sample = parseInt($("#sample").val()) || 0
+
+            //呼吸机总数
+            var ventilation = parseInt($("#ventilation").val()) || 0
+            //中心静脉管总数
+            var AVCatheter = parseInt($("#AVCatheter").val()) || 0
+            //血流感染数
+            var CRBSI = parseInt($("#CRBSI").val()) || 0
+
+            //导尿管总数
+            var urethralCatheter = parseInt($("#urethralCatheter").val()) || 0
+            //尿管感染
+            var CAUTI = parseInt($("#CAUTI").val()) || 0
+
+            $.each($("input:text"), function (i, text) {
+                var myReg = /^[0-9]+$/;
+                if (text.value && (!myReg.test(text.value))) {
+                    error = "表格填写错误，应为全数字格式"
+                }
+            });
+
+
+            if ((y_total > 0) && total != (y_total + entry - out)) {
+                error = "出入院人数与昨日数据不符"
+            }
+            if (entry != (outpatient + shiftIn)) {
+                error = "新入病人总数与来源总数不符"
+            }
+            if (out != (transfer + improve + cure + automaticDischarge + death)) {
+                error = "病人出科总数与去处不符"
+            }
+            if (antibiotic < sample) {
+                error = "标本培养数不能大于新增抗生素人数"
+            }
+            if (total < ventilation) {
+                error = "机械通气人数不能大于总病人数"
+            }
+            if (total < AVCatheter) {
+                error = "动静脉插管人数不能大于总病人数"
+            }
+            if (AVCatheter < CRBSI) {
+                error = "新血流感染人数不能大于血流导管总人数"
+            }
+            if (total < urethralCatheter) {
+                error = "留置导尿人数不能大于总病人数"
+            }
+            if (urethralCatheter < CAUTI) {
+                error = "新尿管感染人数不能大于留置尿管人数"
+            }
+
+            return error;
+        }
+
+
+        //提交
+        function submitInfo() {
+            //提交前验证数据
+            var error = checkInfo();
+            if (error) {
+                alert(error);
+            } else {
+                qualityControl.submit();
+            }
+        }
+    </script>
+{% endblock %}
+
+

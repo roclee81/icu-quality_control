@@ -1,0 +1,78 @@
+<script>
+
+    //为了在显示笔记时，右侧的笔记 div层一直保持在当前窗口显示，并且显示滚动条
+    //重新调整 main内容高度的函数
+    function reposition() {
+
+        //如果手机浏览器，main 和 left 会上下并列显示，此时不需要让scroll的top向下偏移
+        //此地仅设置电脑浏览器左右格式的情况
+        if ($("#left").offset().left != $("#main").offset().left) {
+            var scrollTop = $(document).scrollTop();
+            var navbar_height = $(".navbar").height();
+            var top = 0;
+
+            if(scrollTop >= navbar_height){
+                top = scrollTop - navbar_height;
+            }
+
+            $("#scroll").height($(window).height() * 0.85);
+            $("#scroll").css("top", top);
+        }
+    }//ends of reposition
+
+    //重新调整 main内容高度的函数
+    reposition();
+    $(document).scroll(function () {
+        reposition();
+    });
+</script>
+
+
+<div id=scroll style="position:relative;overflow:auto;">
+
+
+<form  method="post" id="form_note_update">
+    <input type="hidden" value="{{note.id}}" name="id"/>
+    <label>
+        标题：
+        <input type="text" value="{{note.title}}" name="title" />
+    </label>
+    <p>
+
+    <div id=editor>
+        {{note.content|safe}}
+    </div>
+    <textarea  class="none" id="text1" cols=60 rows=30 name="content"></textarea>
+    <script type="text/javascript" src="/static/wangEditor/wangEditor.min.js"></script>
+    <script type="text/javascript">
+        var E = window.wangEditor
+        var editor = new E('#editor')
+        editor.customConfig.uploadImgShowBase64 = true
+        editor.customConfig.pasteFilterStyle = false
+            // 自定义菜单配置
+            editor.customConfig.menus = [
+                'head',  // 标题
+                'bold',  // 粗体
+                'foreColor',  // 文字颜色
+                'backColor',  // 背景颜色
+                'link',  // 插入链接
+                'list',  // 列表
+                'justify',  // 对齐方式
+                'emoticon',  // 表情
+                'image',  // 插入图片
+                'code',  // 插入代码
+            ]
+        editor.create()
+    </script>
+    <p>
+
+    <label>
+        <input type="button" onclick="note_update('{{note.id}}')" value="提交" />
+    </label>
+    <label>
+        <input  type="reset" value="重置" />
+    </label>
+    </p>
+</form>
+
+</div> <!-- ends of  div scroll -->

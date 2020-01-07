@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col-md-2" id="left">
+<!--
+左侧导航菜单
+-->
+{% include "stats/left_menu.html" %}
+</div>
+
+
+<div class="col-md-8 main" id="main">
+<!--
+右侧主内容
+-->
+
+
+	<div class="row">
+		<div class="span12">
+			<div class="tabbable" id="tabs-997599">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#panel-55569" data-toggle="tab">第一部分</a>
+					</li>
+					<li>
+						<a href="#panel-371424" data-toggle="tab">第二部分</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="panel-55569">
+						<p>
+							第一部分内容.
+						</p>
+					</div>
+					<div class="tab-pane" id="panel-371424">
+						<p>
+							第二部分内容.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
+
+

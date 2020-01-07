@@ -1,0 +1,36 @@
+<script>
+
+    //为了在显示笔记时，右侧的笔记 div层一直保持在当前窗口显示，并且显示滚动条
+    //重新调整 main内容高度的函数
+    function reposition() {
+
+        //如果手机浏览器，main 和 left 会上下并列显示，此时不需要让scroll的top向下偏移
+        //此地仅设置电脑浏览器左右格式的情况
+        if ($("#left").offset().left != $("#main").offset().left) {
+            var scrollTop = $(document).scrollTop();
+            var navbar_height = $(".navbar").height();
+            var top = 0;
+
+            if(scrollTop >= navbar_height){
+                top = scrollTop - navbar_height;
+            }
+
+            $("#scroll").height($(window).height() * 0.85);
+            $("#scroll").css("top", top);
+        }
+    }//ends of reposition
+
+    //重新调整 main内容高度的函数
+    reposition();
+    $(document).scroll(function () {
+        reposition();
+    });
+</script>
+
+
+<div id=scroll style="position:relative;overflow:auto;">
+
+    <!-- 显示操作反馈的信息 -->
+    <button type="button" class="btn btn-primary"><h4>{{ noteInfo }}</h4></button>
+
+</div> <!-- ends of  div scroll -->

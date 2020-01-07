@@ -1,0 +1,2 @@
+#!/bin/sh
+python3 /home/pi/piServer/manage.py runserver 0.0.0.0:80

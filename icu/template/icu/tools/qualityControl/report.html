@@ -1,0 +1,91 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+{#    <a href=/icu/qc>#}
+{#        <button class="btn btn-info">返回质控主页面</button>#}
+{#    </a>#}
+    <a href=/icu/qc/edit/{% now "Y-m-d" %}>
+        <button class="btn btn-info">填写质控数据</button>
+    </a>
+    <a href=/icu/qc/list>
+        <button class="btn btn-info">显示质控数据列表</button>
+    </a>
+
+    <hr/>
+
+    <a href=/icu/qc/report/{{ info.0.year|add:-1 }}>
+        <button class="btn btn-success btn-xs">上一年数据</button>
+    </a>
+    {{ info.0.year }}年数据报表
+    <a href=/icu/qc/report/{{ info.0.year|add:1 }}>
+        <button class="btn btn-success btn-xs">下一年数据</button>
+    </a>
+    {% if info.0.qcDate__count == 0 %}
+        <br />目前没有数据可以做报表，您确定您做了质控？
+    {% else %}
+
+        {# 下载数据链接 #}
+        <div align=right>
+            <a href=/icu/qc/reportDownload/{{ info.0.year }}>
+                <button class="btn btn-success btn-xs">下载所有数据</button>
+                </a>
+        </div>
+        <table border=1>
+            <tr>
+                <td> 月份</td>
+                <td> 收治总数</td>
+                <td> 收治床位日</td>
+                <td> ApacheII≥15收治率(%)</td>
+                <td> 3hBundle完成率(%)</td>
+                <td> 6hBundle完成率(%)</td>
+                <td> 标本送检率(%)</td>
+                <td> DVT预防率(%)</td>
+                <td> 预计病死率(%)</td>
+                <td> 标化病死率(%)</td>
+                <td> 非计划拨管率(%)</td>
+                <td> 48h再插管率(%)</td>
+                <td> 非计划转入率(%)</td>
+                <td> 48h重返率(%)</td>
+                <td> VAP发生率(‰)</td>
+                <td> CRBSI发生率(‰)</td>
+                <td> CAUTI发生率(‰)</td>
+            </tr>
+
+            {% for data in info %}
+                <tr>
+                    <td> {{ data.month }} </td>
+                    <td> {{ data.entry__sum }} </td>
+                    <td> {{ data.total__sum }} </td>
+                    <td> {{ data.apacheII15Rate }} </td>
+                    <td> {{ data.bundle3Rate }}</td>
+                    <td> {{ data.bundle6Rate }}</td>
+                    <td> {{ data.sampleRate }} </td>
+                    <td> {{ data.preventDVTRate }} </td>
+                    <td> {{ data.apacheIIDeathRate }} </td>
+                    <td> {{ data.standDeathRate }} </td>
+                    <td> {{ data.unplannedExtubationRate }} </td>
+                    <td> {{ data.reintubationRate }} </td>
+                    <td> {{ data.unplannedShiftRate }} </td>
+                    <td> {{ data.revertRate }} </td>
+                    <td> {{ data.VAPRate }} </td>
+                    <td> {{ data.CRBSIRate }} </td>
+                    <td> {{ data.CAUTIRate }} </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+
+
+        <script src=/static/js/echarts.min.js></script>
+        {% for echart in echarts %}
+            {{ echart | safe }}
+        {% endfor %}
+
+
+
+    {% endif %}
+
+
+{% endblock %}
+
+

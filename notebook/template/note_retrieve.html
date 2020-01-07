@@ -1,0 +1,115 @@
+<script>
+
+    //为了在显示笔记时，右侧的笔记 div层一直保持在当前窗口显示，并且显示滚动条
+    //重新调整 main内容高度的函数
+    function reposition() {
+
+        //如果手机浏览器，main 和 left 会上下并列显示，此时不需要让scroll的top向下偏移
+        //此地仅设置电脑浏览器左右格式的情况
+        if ($("#left").offset().left != $("#main").offset().left) {
+            var scrollTop = $(document).scrollTop();
+            var navbar_height = $(".navbar").height();
+            var top = 0;
+
+            if(scrollTop >= navbar_height){
+                top = scrollTop - navbar_height;
+            }
+
+            $("#scroll").height($(window).height() * 0.85);
+            $("#scroll").css("top", top);
+        }
+    }//ends of reposition
+
+    //重新调整 main内容高度的函数
+    reposition();
+    $(document).scroll(function () {
+        reposition();
+    });
+</script>
+
+<div id=scroll style="position:relative;overflow:auto;">
+
+    {% ifequal note.note_type 10 %}
+        <!-- 回收站功能 -->
+        <button type="button" class="btn btn-primary" onclick="empty_recycle_bin('{{ note.id }}')"><h4>清空回收站</h4>
+        </button>
+
+    {% else %}
+
+
+        <!-- 正常文件夹或者笔记内容呈现 -->
+        <!-- 显示该文件的路径 -->
+        {% if basedirs %}
+            <span class="label label-info">
+            {% for basedir in basedirs %}
+                {{ basedir }}
+                &gt;&gt;
+            {% endfor %}
+            </span>
+        {%else%}
+            <span>&nbsp;</span>
+        {% endif %}
+            <!-- 显示标题 -->
+        <h2>{{ note.title }}</h2>
+        <hr>
+
+
+        <!-- 显示内容 -->
+        {{ note.content|safe }}
+        <hr>
+        <!-- 显示日期 -->
+        {{ note.create_time|date:"Y年m月d日 H:i:s" }}
+        <hr>
+
+        <!-- 代码高亮 -->
+        <link rel="stylesheet" href="/static/css/vs.min.css">
+        <script type="text/javascript" src="/static/js/highlight.min.js"></script>
+        <script>
+            //hljs.initHighlighting.called = false;
+            hljs.initHighlighting();
+        </script>
+        <!-- ends of 代码高亮 -->
+
+        <!-- 模态框 -->
+        <div class="modal fade" id="modal_delete">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- 模态框头部 -->
+                    <div class="modal-header">
+                        {% ifequal note.note_type 0 %}
+                            <h4 class="modal-title text-danger">删除目录</h4>
+                        {% else %}
+                            <h4 class="modal-title text-primary">删除笔记</h4>
+                        {% endifequal %}
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div><!-- 模态框头部 -->
+                    <!-- 模态框主体 -->
+                    <div class="modal-body">
+                        {% ifequal note.note_type 0 %}
+                            <p class="text-danger text-center">目录删除警告!!!<br>删除目录:{{ note.title }}...<br>目录下的所有文件不可恢复</p>
+                        {% else %}
+                            <p class="text-primary">{{ note.title }}...</p>
+                        {% endifequal %}
+                    </div><!-- 模态框主体 -->
+                    <!-- 模态框底部 -->
+                    <div class="modal-footer">
+                        <button class="btn btn-danger" data-dismiss="modal" onclick="note_remove('{{ note.id }}')">确定
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div><!-- 模态框底部 -->
+                </div>
+            </div>
+        </div>
+        <!--ends of  模态框 -->
+
+        <!-- 笔记修改删除按钮 -->
+        <button type="button" class="btn btn-primary" onclick="form_update('{{ note.id }}')">修改</button>
+        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal_delete"> 删除</button>
+        <!-- ends of  笔记修改删除按钮 -->
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+    {% endifequal %}
+
+</div> <!-- ends of  div scroll -->

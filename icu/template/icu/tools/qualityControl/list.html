@@ -1,0 +1,137 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+{#    <a href=/icu/qc>#}
+{#        <button class="btn btn-info">返回质控主页面</button>#}
+{#    </a>#}
+    <a href=/icu/qc/edit/{% now "Y-m-d" %}>
+        <button class="btn btn-info">填写质控数据</button>
+    </a>
+    <a href=/icu/qc/report>
+        <button class="btn btn-info">质控报表</button>
+    </a>
+{#    <a href=/icu/tools/apacheII>#}
+{#        <button class="btn btn-info">直达ApacheII量表主页面</button>#}
+{#    </a>#}
+    <hr/>
+
+
+
+    {# 下载数据链接 #}
+    <div align=right>
+        <a href=/icu/qc/download/all>下载所有数据</a>
+    </div>
+
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>id</td>
+            <td>质控日期</td>
+            <td>总数</td>
+            <td>总入科</td>
+            <td>门诊转入</td>
+            <td>病房转入</td>
+            <td>非计划</td>
+            <td>48h重返</td>
+            <td>出科</td>
+            <td>转出他科</td>
+            <td>好转出院</td>
+            <td>治愈出院</td>
+            <td>自动出院</td>
+            <td>死亡</td>
+            <td>机械通气</td>
+            <td>新VAP</td>
+            <td>昨日插管</td>
+            <td>非计划拨管</td>
+            <td>48h再插</td>
+            <td>血流导管</td>
+            <td>CRBSI</td>
+            <td>导尿管</td>
+            <td>CAUTI</td>
+            <td>SS</td>
+            <td>3hB</td>
+            <td>6hB</td>
+            <td>抗生素</td>
+            <td>抗生素前标本</td>
+            <td>DVT预防</td>
+            <td>新发DVT</td>
+        </tr>
+
+        {% for qc in qcs %}
+            <tr>
+                {# 相加乘以-1#}
+                <td>{% widthratio forloop.counter|add:start 1 -1 %}</td>
+                <td>{{ qc.qcDate|date:"Y-m-d" }}</td>
+                <td>{{ qc.total }}</td>
+                <td>{{ qc.entry }}</td>
+                <td>{{ qc.outpatient }}</td>
+                <td>{{ qc.shiftIn }}</td>
+                <td>{{ qc.unplannedShift }}</td>
+                <td>{{ qc.revert }}</td>
+                <td>{{ qc.out }}</td>
+                <td>{{ qc.transfer }}</td>
+                <td>{{ qc.improve }}</td>
+                <td>{{ qc.cure }}</td>
+                <td>{{ qc.automaticDischarge }}</td>
+                <td>{{ qc.death }}</td>
+                <td>{{ qc.ventilation }}</td>
+                <td>{{ qc.newVAP }}</td>
+                <td>{{ qc.newTracheaCannula }}</td>
+                <td>{{ qc.unplannedExtubation }}</td>
+                <td>{{ qc.reintubation }}</td>
+                <td>{{ qc.AVCatheter }}</td>
+                <td>{{ qc.CRBSI }}</td>
+                <td>{{ qc.urethralCatheter }}</td>
+                <td>{{ qc.CAUTI }}</td>
+                <td>{{ qc.septicShock }}</td>
+                <td>{{ qc.bundle3 }}</td>
+                <td>{{ qc.bundle6 }}</td>
+                <td>{{ qc.antibiotic }}</td>
+                <td>{{ qc.sample }}</td>
+                <td>{{ qc.preventDVT }}</td>
+                <td>{{ qc.newDVT }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {#分页器#}
+    <ul>
+        {#上一页按钮开始#}
+        {# 如果当前页有上一页#}
+        {% if qcs.has_previous %}
+            {#  当前页的上一页按钮正常使用#}
+            <li style="display:inline"><a href="{{ qcs.previous_page_number }}">上一页</a></li>
+        {% else %}
+            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+            <li style="display:inline">上一页</li>
+        {% endif %}
+        {#上一页按钮结束#}
+        {# 页码开始#}
+        {% for num in page_range %}
+
+            {% if num == qcs.number %}
+                <li style="display:inline">{{ num }}</li>
+            {% else %}
+                <li style="display:inline"><a href="{{ num }}">{{ num }}</a></li>
+
+            {% endif %}
+        {% endfor %}
+        {#页码结束#}
+        {# 下一页按钮开始#}
+        {% if qcs.has_next %}
+            <li style="display:inline"><a href="{{ qcs.next_page_number }}">下一页</a></li>
+        {% else %}
+            <li style="display:inline">下一页</li>
+        {% endif %}
+        {# 下一页按钮结束#}
+    </ul>
+
+
+
+    <script src=/static/js/echarts.min.js></script>
+    {% for echart in echarts %}
+        {{ echart | safe }}
+    {% endfor %}
+
+{% endblock %}
+
+

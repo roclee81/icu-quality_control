@@ -1,0 +1,33 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+    <a href=/icu/qc/edit/{% now "Y-m-d" %}>
+        <button class="btn btn-info">填写质控数据</button>
+    </a>
+    <a href=/icu/qc/list>
+        <button class="btn btn-info">显示质控数据列表</button>
+    </a>
+    <a href=/icu/qc/report>
+        <button class="btn btn-info">质控报表</button>
+    </a>
+    <a href=/icu/tools/apacheII>
+{#        <button class="btn btn-info">直达ApacheII量表主页面</button>#}
+{#    </a>#}
+    <br/>
+    <br/>
+
+        <h3>
+    <strong>重症医学质量控制使用教程： </strong></h3>
+    <ul>
+    <li>未注册用户可以点击试用帐号登录，自由试用</li>
+    <li>注册用户可以点击右上角用户名进行修改用户信息设置</li>
+    <li>设置同事姓名，用以填报<span class="red">Apache-II评分表</span></li>
+    <li>设置部门照片，用以<span class="red">修改网站的Logo</span>为本医院Logo</li>
+    <li>填写数据时，如果无此项数据，可以留空，或者填写0</li>
+</ul>
+
+
+    *注：医生及医院信息，需要点击登录用户名-&gt;修改用户信息，在其中设置公司，部门，同事，这样才能正确填表
+    <hr/>
+{% endblock %}
+
+

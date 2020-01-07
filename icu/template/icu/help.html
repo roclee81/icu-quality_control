@@ -1,0 +1,47 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+
+<br>
+<style type="text/css">
+.red {
+	color: #F00;
+}
+</style>
+
+    <h3><strong>在线使用帮助</strong>:</h3>
+<ul>
+        <li>在线用户注册、登录后查看首页的帮助文件，可在线使用</li>
+        <li>注册后应填写用户相关单位、同事等信息</li>
+        <li>如有疑问者可联系Q65117032</li>
+        <li>……</li>
+
+</ul>
+
+    <h3><strong>脱机使用帮助</strong>:</h3>
+<ul>
+        <li>如果想在局域网电脑中使用，可以下载程序包自行安装
+            <a href="https://github.com/dhs789520/icu-quality_control">（源代码已经上传到Github中）</a>
+        </li>
+        <li>优点是：完全自己可控，局域网使用、使用时可以不联网，数据自己保存</li>
+        <li>下载程序包安装单机版的步骤为：</li>
+        <li>1、Github上下载源代码，并且解压到本地</li>
+        <li>2、安装Python-3.7、Django-2.05等必备库</li>
+        <li>3、进入程序目录，命令行输入：python manage.py migrate</li>
+        <li>3、双击 runserver80.bat开始运行程序</li>
+        <li>打开浏览器http://127.0.0.0/icu 您的质控工具就可以使用了！</li>
+        <li>能力更强的同学也可以使用《树莓派》、《花生壳》、在线服务器等工具在线部署^_^</li>
+</ul>
+
+        <h3><strong>共同开发帮助</strong>:</h3>
+<ul>
+        <li>对于有开发能力的同学，可以加入质控开发</li>
+        <li><a href="https://github.com/dhs789520/icu-quality_control">https://github.com/dhs789520/icu-quality_control</a></li>
+        <li>优点是：不断地在开发中掌握质控数据的利用、动手又动脑</li>
+        <li>需要具备技能：Python-Django、Html、Javascript</li>
+        <li>需要具备共享精神</li>
+
+</ul>
+{% endblock %}
+
+

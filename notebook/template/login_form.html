@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <p>
+        <p>
+            {% for e in error %}
+                <font color=red>
+                    尝试{{ request.session.try_times }} 次<br>
+                    {{ e }}
+                </font>
+            {% endfor %}
+            <br>
+
+
+            <button class="btn btn-danger" onclick="setTest()">试用帐号登录</button>
+            <br /> <br />
+            <script>
+                //设置试用收号为test并且提交
+                function setTest() {
+                    $("#username").val("icu");
+                    $("#password").val("icu");
+                    $("#remember_me").attr("checked", "checked");
+                    $("#form").attr("action", "/notebook/user/login");
+                    $("#form").submit();
+                }
+            </script>
+
+            <form class="form-horizontal" name="userLogin" id="form" method="post" action="/notebook/user/login">
+
+            <div class="form-group">
+                <h3><label>用户登录</label></h3>
+            </div>
+                
+                {% csrf_token %}
+
+
+        <div class="form-group">
+        <label for="username">请输入用户名:</label>
+        <input required="required" class="form-control" type="text" name=username id=username value="" placeholder="请输入用户名">
+        </div>
+
+        <div class="form-group">
+        <label for="password">请输入密码:</label>
+        <input class="form-control" type="password" name=password id=password value="" placeholder="请输入密码">
+        </div>
+
+
+            {% if request.session.try_times > 5 %}
+                <div class="form-group">
+                <label for="verify">请输入验证码:<span class="required">*</span></label>
+                <input required="required" class="form-control" type="text" name=verify id="verify" value="" placeholder="请输入验证码">
+                        <img onclick="this.setAttribute('src','/notebook/verify.jpg?nocache='+Math.random());"
+                             src="/notebook/verify.jpg" alt="点击图片更换验证码"/>
+                </div>
+            {% endif %}
+
+        <div class="form-group">
+           <label>
+            <input type="checkbox" id="remember_me" name="remember_me" value="1"
+                   {% if request.POST.remember_me %}checked{% endif %}> 一周免登录
+           </label>
+        </div>
+
+        <div class="form-group">
+            <button class="bun btn-primary" type="submit" name="Submit">登录</button>
+            <a href="/notebook/user/reg">没有用户名?立即前往注册</a>
+        </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}
+

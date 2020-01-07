@@ -1,0 +1,88 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+{#    <a href=/icu/tools/apacheII>#}
+{#        <button class="btn btn-info"> 返回ApacheII量表主页面</button>#}
+{#    </a>#}
+    <a href=/icu/tools/apacheII/add>
+        <button class="btn btn-info"> 新增加一个ApacheII量表</button>
+    </a>
+    <a href=/icu/tools/apacheII/list/>
+        <button class="btn btn-info">显示本用户提交的ApacheII量表</button>
+    </a>
+{#    <a href=/icu/qc>#}
+{#        <button class="btn btn-info"> 直达ICU质控主页面</button>#}
+{#    </a>#}
+    <hr/>
+
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>住院号</td>
+            <td>床号</td>
+            <td width="60px">姓名</td>
+            <td>年龄</td>
+            <td>体温</td>
+            <td>收缩压</td>
+            <td>舒张压</td>
+            <td>心率</td>
+            <td>呼吸</td>
+            <td>WBC</td>
+            <td>HCT</td>
+            <td>pH</td>
+            <td>FiO2</td>
+            <td>PaO2</td>
+            <td>PaCO2</td>
+            <td>Na<sup>+</sup></td>
+            <td>K<sup>+</sup></td>
+            <td>SCr</td>
+            <td>急性肾衰</td>
+            <td>既往健康</td>
+            <td>GCS</td>
+            <td>非手术疾病</td>
+            <td>手术疾病</td>
+            <td>急诊手术后</td>
+            <td width="60px">医生</td>
+            <td>评分时间</td>
+        </tr>
+        <tr>
+            <td>{{ p.inNumber }}</td>
+            <td>{{ p.bedNumber }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.age }}</td>
+            <td>{{ p.temperature }}</td>
+            <td>{{ p.SBP }}</td>
+            <td>{{ p.DBP }}</td>
+            <td>{{ p.HR }}</td>
+            <td>{{ p.R }}</td>
+            <td>{{ p.WBC }}</td>
+            <td>{{ p.HCT }}</td>
+            <td>{{ p.pH }}</td>
+            <td>{{ p.FiO2 }}</td>
+            <td>{{ p.PaO2 }}</td>
+            <td>{{ p.PaCO2 }}</td>
+            <td>{{ p.Na }}</td>
+            <td>{{ p.K }}</td>
+            <td>{{ p.Cr }}</td>
+            <td>{{ p.AKI }}</td>
+            <td>{{ p.health }}</td>
+            <td>E{{ p.E }}V{{ p.V }}M{{ p.M }}</td>
+            <td>{{ p.noSurgery }}</td>
+            <td>{{ p.surgery }}</td>
+            <td>{{ p.afterSurgery }}</td>
+            <td>{{ p.doctor }}</td>
+            <td>{{ p.scoreTime|date:'Y-m-d H:i' }}</td>
+        </tr>
+    </table>
+
+    <br/>患者ApacheII总分为 : {{ p.score }}
+    <br/>患者预测死亡率R值为: {{ p.deathRate }} %
+    <br/><a target=_blank href="/icu/tools/apacheII/download/id/{{ p.id }}">
+    <button class="btn btn-success btn-xs">下载此评分表并打印</button>
+    </a>
+
+    <br/><a href="/icu/tools/apacheII/update/{{ p.id }}">重新修改</a>
+
+
+{% endblock %}
+
+

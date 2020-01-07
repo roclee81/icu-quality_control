@@ -1,0 +1,15 @@
+{% extends 'icu/base.html' %}
+
+{% block content %}
+
+    <a>出错啦！</a>
+    出错信息如下：
+    {% for error in errors %}
+        <br/><strong style='color:red'>{{ error }}</strong>
+    {% endfor %}
+
+
+
+{% endblock %}
+
+

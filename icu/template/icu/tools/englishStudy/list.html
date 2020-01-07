@@ -1,0 +1,82 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+    <a href=/icu/englishStudy/edit/>
+        <button class="btn btn-info">新增双语段落</button>
+    </a>
+    <hr/>
+
+
+
+    <table border="1" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>id</td>
+            <td>原文</td>
+            <td>长度</td>
+            <td>译文</td>
+            <td width="60px">提交者</td>
+            <td width="90px">创建日期</td>
+            <td width="40px">修改</td>
+        </tr>
+
+        {% for bil in bils %}
+            <tr>
+                {# 相加乘以-1#}
+                <td>{% widthratio forloop.counter|add:start 1 -1 %}</td>
+                <td><a href="/icu/englishStudy/retrieve/{{ bil.id }}">
+                    <pre>{{ bil.src|slice:"40" }}</pre>
+                </a></td>
+                <td>{{ bil.length }}</td>
+                <td><a href="/icu/englishStudy/retrieve/{{ bil.id }}">
+                    <pre>{{ bil.dst|slice:"30" }}</pre>
+                </a></td>
+                <td>
+                    <pre>{{ bil.doctor|slice:"30" }}</pre>
+                </td>
+                <td>{{ bil.createTime|date:'Y-m-d' }}</td>
+                <td><a href="/icu/englishStudy/edit/{{ bil.id }}">修改</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+    {#分页器#}
+    <ul>
+        {#上一页按钮开始#}
+        {# 如果当前页有上一页#}
+        {% if bils.has_previous %}
+            {#  当前页的上一页按钮正常使用#}
+            <li style="display:inline"><a href="{{ bils.previous_page_number }}">上一页</a></li>
+        {% else %}
+            {# 当前页的不存在上一页时,上一页的按钮不可用#}
+            <li style="display:inline">上一页</li>
+        {% endif %}
+        {#上一页按钮结束#}
+        {# 页码开始#}
+        {% for num in page_range %}
+
+            {% if num == bils.number %}
+                <li style="display:inline">{{ num }}</li>
+            {% else %}
+                <li style="display:inline"><a href="{{ num }}">{{ num }}</a></li>
+
+            {% endif %}
+        {% endfor %}
+        {#页码结束#}
+        {# 下一页按钮开始#}
+        {% if bils.has_next %}
+            <li style="display:inline"><a href="{{ bils.next_page_number }}">下一页</a></li>
+        {% else %}
+            <li style="display:inline">下一页</li>
+        {% endif %}
+        {# 下一页按钮结束#}
+    </ul>
+
+
+
+
+    <br/>
+    *注:所有双语学习的语料是应学习要求加工而成，不作为临床数据，不作为法律依据。
+{% endblock %}
+
+

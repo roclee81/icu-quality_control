@@ -1,0 +1,57 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+    <a href=/icu/englishStudy/list>
+        <button class="btn btn-info">显示双语学习列表</button>
+    </a>
+    <hr/>
+
+
+    <form id=englishStudy action="" method=post>
+
+        双语学习，语料添加,在文本框中输入要翻译的文字，网站会自动翻译！
+
+        <br/>
+
+        <input type="hidden" id=id value={{ bil.id }} name="id"/>
+        <textarea id="src" name="src"
+                  style="width:800px;height:500px;overflow:scroll;resize:none;">{{ bil.src }}</textarea>
+        <br/>
+        <label>提交者:</label>
+        <select id=doctor name=doctor>
+            <option value={{ bil.doctor }}>{{ bil.doctor }}</option>
+            {% for workmate in workmates %}
+                <option value="{{ workmate }}">{{ workmate }}</option>
+            {% endfor %}
+        </select>
+
+        <br/>
+
+        <label>
+            <input type="button" onclick="submitInfo()" value="提交"/>
+        </label>
+        <label>
+            <input id=reset type="reset" value="重置"/>
+        </label>
+
+        <br/>
+
+    </form>
+
+    <script>
+
+        //提交
+        function submitInfo() {
+            if ($("#doctor").val() == "") {
+                alert("请选择提交者姓名，请检查后重新填写\n");
+            } else if ($("#src").val() == "") {
+                alert("请填写要翻译的文本，请检查后重新填写\n");
+            } else {
+                englishStudy.submit();
+            }
+        } //ends_of_submitInfo
+
+    </script>
+{% endblock %}
+
+

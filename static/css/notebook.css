@@ -1,0 +1,143 @@
+﻿/* CSS Document */
+
+html{
+    height: 100%;
+   /*设置默认的字体大小*/
+    font-size:16px;
+}
+
+body{
+    height: 100%;
+    overflow-y:scroll;
+}
+
+/*设置表单分组控件的样式*/
+fieldset {
+    padding: .35em .625em .35em;
+    margin-bottom: 20px;
+    border: 1px solid silver;
+}
+
+/*设置表单分组控件的样式*/
+legend {
+    padding: 0em;
+    margin-bottom: 2px;
+    border: 0;
+    width: auto;
+}
+
+/*给必填项的form-group 增加红色* */
+.form-group span.required {
+	color: red;
+	font-size: 150%;
+}
+
+.container-fluid{
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* 设置子元素在该方向上的对齐方式
+    justify-content: space-between; */
+    padding: 0px;
+}
+
+.footer{
+    flex: 1 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+
+
+.ful{
+    /*ul 去除圆点*/
+	list-style-type: none;
+}
+.none{
+    /*隐藏*/
+    display:none;
+}
+div[class="row dir"]:hover{
+    background: #ADFEDC;
+}
+
+div[class="row note"]{
+    margin:0px;
+}
+
+div[class="row dir"]{
+    margin:0px;
+}
+
+div[class="row note"]:hover{
+    background: #FFD2D2;
+}
+
+.btn_tree{
+    /*图标文件，及大小设置*/
+    width:22px;
+    height:20px;
+    display:block;
+    background-image: url(../images/btn_icon.gif);
+}
+.file{
+    /*笔记图标 - */
+	background-position: -226px -42px;
+}
+.deleted{
+    /*被删除的红色大马X - */
+	background-position: -250px -44px;
+}
+
+.recycle_bin{
+    /*回收站图标 - */
+	background-position: -155px -128px;
+}
+.recycle_bin:hover{
+    /*回收站图标,悬停效果 - */
+	background-position: -180px -128px;
+}
+
+
+.add_note{
+    /*增加笔记图标，*/
+	background-position: -156px -104px;
+}
+.add_dir{
+    /*增加文件夹图标，*/
+	background-position: -155px -18px;
+}
+.add_note:hover{
+    /*增加笔记图标，悬停效果*/
+	background-position: -180px -104px;
+}
+
+.add_dir:hover{
+    /*增加文件夹图标 悬停效果 -  - */
+	background-position: -179px -18px;
+}
+
+
+.open{
+    /*打开状态标记 - */
+	background-position: -43px -179px;
+}
+.close{
+    /*关闭状态标记 + */
+	background-position: -43px -201px;
+}
+.pack {
+    /*文件夹关闭图标*/
+	background-position: 0px -204px;
+}
+.unpack {
+    /*文件夹打开图标*/
+	background-position: 0px 0px;
+}
+
+
+
+
+

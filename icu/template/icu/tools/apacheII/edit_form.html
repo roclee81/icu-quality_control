@@ -1,0 +1,631 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+
+    <a href=/icu/tools/apacheII>
+        <button class="btn btn-info"> 返回ApacheII量表主页面</button>
+    </a>
+    <a href=/icu/tools/apacheII/list/>
+        <button class="btn btn-info">显示本用户提交的ApacheII量表</button>
+    </a>
+{#    <a href=/icu/qc>#}
+{#        <button class="btn btn-info"> 直达ICU质控主页面</button>#}
+{#    </a>#}
+    <hr/>
+
+
+
+    <style type="text/css">
+        input {
+            width: 95px;
+            color: red;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            text-align: right; /* 这句话是对齐的关键 */
+            color: #999;
+        }
+    </style>
+
+    {% if p.id %}
+        <form id=patient action="/icu/tools/apacheII/update/{{ p.id }}" method=post>
+        <input id=id type="hidden" name="id" value="{{ p.id }}"/>
+    {% else %}
+        <form id=patient action="/icu/tools/apacheII/add" method=post>
+    {% endif %}
+
+ApacheII在线量表<br/>
+
+基本信息:
+<br/>
+<label>姓名:</label>
+<input type="text" name=name id=name value={{ p.name }}>
+<div id=nameInfo style="width:50px;display:inline-block"></div>
+<label>年龄:</label>
+<input type="text" name=age id=age value={{ p.age }}>
+<div id=ageInfo style="width:50px;display:inline-block"></div>
+<br/>
+<label>床号:</label>
+<input type="text" name=bedNumber id=bedNumber value={{ p.bedNumber }}>
+<div id=bedNumberInfo style="width:50px;display:inline-block"></div>
+<label>住院号:</label>
+<input type="text" name=inNumber id=inNumber value={{ p.inNumber }}>
+<div id=inNumberInfo style="width:50px;display:inline-block"></div>
+
+
+<br/>
+急性生理:
+<br/>
+<label>肛温(℃):</label>
+<input type="text" name=temperature id=temperature value={{ p.temperature }}>
+<div id=temperatureInfo style="width:50px;display:inline-block"></div>
+<br/>
+<label>收缩压(mmHg):</label>
+<input type="text" name=SBP id=SBP value={{ p.SBP }}>
+<div id=SBPInfo style="width:50px;display:inline-block"></div>
+<label>舒张压(mmHg):</label>
+<input type="text" name=DBP id=DBP value={{ p.DBP }}>
+<div id=DBPInfo style="width:50px;display:inline-block"></div>
+<br/>
+<label>HR(次/分):</label>
+<input type="text" name=HR id=HR value={{ p.HR }}>
+<div id=HRInfo style="width:50px;display:inline-block"></div>
+<label>R(次/分):</label>
+<input type="text" name=R id=R value={{ p.R }}>
+<div id=RInfo style="width:50px;display:inline-block"></div>
+<br/>
+<label>WBC(X10<sup>9</sup>/L):</label>
+<input type="text" name=WBC id=WBC value={{ p.WBC }}>
+<div id=WBCInfo style="width:50px;display:inline-block"></div>
+<label>HCT(%):</label>
+<input type="text" name=HCT id=HCT value={{ p.HCT }}>
+<div id=HCTInfo style="width:50px;display:inline-block"></div>
+<br/>
+<label>动脉血pH:</label>
+<input type="text" name=pH id=pH value={{ p.pH }}>
+<div id=pHInfo style="width:50px;display:inline-block"></div>
+<label>FiO2(%):</label>
+<input type="text" name=FiO2 id=FiO2 value={{ p.FiO2 }}>
+<div id=FiO2Info style="width:50px;display:inline-block"></div>
+<br/>
+<label>PaO2(mmHg):</label>
+<input type="text" name=PaO2 id=PaO2 value={{ p.PaO2 }}>
+<div id=PaO2Info style="width:50px;display:inline-block"></div>
+<label>PaCO2(mmHg):</label>
+<input type="text" name=PaCO2 id=PaCO2 value={{ p.PaCO2 }}>
+<div id=PaCO2Info style="width:50px;display:inline-block"></div>
+<br/>
+<label>血清Na<sup>+</sup>(mmol/L):</label>
+<input type="text" name=Na id=Na value={{ p.Na }}>
+<div id=NaInfo style="width:50px;display:inline-block"></div>
+<label>血清K<sup>+</sup>(mmol/L):</label>
+<input type="text" name=K id=K value={{ p.K }}>
+<div id=KInfo style="width:50px;display:inline-block"></div>
+<br/>
+<label>血清肌酐(μmol/L):</label>
+<input type="text" name=Cr id=Cr value={{ p.Cr }}>
+<div id=CrInfo style="width:50px;display:inline-block"></div>
+<label>是否急性肾衰:</label>
+<input style="width:30px" name=AKI type=radio value=是 {% if p.AKI == "是" %}checked="checked"{% endif %}>是</input>
+<input style="width:30px" name=AKI type=radio value=否 {% if p.AKI == "否" %}checked="checked"{% endif %}>否</input>
+
+<br/>
+<label>既往健康:</label>
+<select name=health id="health">
+    <option value=></option>
+    <option value=无严重慢性病:0 {% if p.health == "无严重慢性病:0" %}selected="selected"{% endif %}>无严重慢性病:0</option>
+    <option value=有，无须手术:2 {% if p.health == "有，无须手术:2" %}selected="selected"{% endif %}>有，无须手术:2</option>
+    <option value=有，择期手术后:2 {% if p.health == "有，择期手术后:2" %}selected="selected"{% endif %}>有，择期手术后:2</option>
+    <option value=有，急诊手术后:5 {% if p.health == "有，急诊手术后:5" %}selected="selected"{% endif %}>有，急诊手术后:5</option>
+    <option value=有，不能手术:5 {% if p.health == "有，不能手术:5" %}selected="selected"{% endif %}>有，不能手术:5</option>
+</select>
+
+
+<br/>
+GCS评分:
+<label style="width:55px">E:</label><input type="text" name=E id=E value={{ p.E }}>
+<div id=EInfo style="width:50px;display:inline-block"></div>
+<label style="width:30px">V:</label><input type="text" name=V id=V value={{ p.V }}>
+<div id=VInfo style="width:50px;display:inline-block"></div>
+<label style="width:30px">M:</label><input type="text" name=M id=M value={{ p.M }}>
+<div id=MInfo style="width:50px;display:inline-block"></div>
+
+<br/>
+入住ICU主要疾病:
+<br/>
+<label>非手术类疾病:</label>
+<select name=noSurgery id=noSurgery {% if p.surgery %}disabled="disabled" {% endif %}>
+    <option value=></option>
+    <option value=哮喘/过敏症:-2.108 {% if p.noSurgery == "哮喘/过敏症:-2.108" %}selected="selected"{% endif %}>哮喘/过敏症:-2.108
+    </option>
+    <option value=COPD:-0.367 {% if p.noSurgery == "COPD:-0.367" %}selected="selected"{% endif %}>COPD:-0.367</option>
+    <option value=非心源性肺水肿:-0.251 {% if p.noSurgery == "非心源性肺水肿:-0.251" %}selected="selected"{% endif %}>非心源性肺水肿:-0.251
+    </option>
+    <option value=呼吸暂停:-0.168 {% if p.noSurgery == "呼吸暂停-0.168" %}selected="selected"{% endif %}>呼吸暂停-0.168</option>
+    <option value=误吸/中毒/毒性反应:-0.142 {% if p.noSurgery == "误吸/中毒/毒性反应:-0.142" %}selected="selected"{% endif %}>
+        误吸/中毒/毒性反应:-0.142
+    </option>
+    <option value=肺栓塞:-0.128 {% if p.noSurgery == "肺栓塞:-0.128" %}selected="selected"{% endif %}>肺栓塞:-0.128</option>
+    <option value=感染（非全身性）:0 {% if p.noSurgery == "感染（非全身性）:0" %}selected="selected"{% endif %}>感染（非全身性）:0</option>
+    <option value=全身性感染/脓毒症:0.113 {% if p.noSurgery == "全身性感染/脓毒症:0.113" %}selected="selected"{% endif %}>
+        全身性感染/脓毒症:0.113
+    </option>
+    <option value=高血压:-1.798 {% if p.noSurgery == "高血压:-1.798" %}selected="selected"{% endif %}>高血压:-1.798</option>
+    <option value=心率失常:-1.368 {% if p.noSurgery == "心率失常:-1.368" %}selected="selected"{% endif %}>心率失常:-1.368</option>
+    <option value=充血性心衰:-0.424 {% if p.noSurgery == "充血性心衰:-0.424" %}selected="selected"{% endif %}>充血性心衰:-0.424
+    </option>
+    <option value=失血性或低血容量性休克:0.493 {% if p.noSurgery == "失血性或低血容量性休克:0.493" %}selected="selected"{% endif %}>
+        失血性或低血容量性休克:0.493
+    </option>
+    <option value=冠心病:-0.191 {% if p.noSurgery == "冠心病:-0.191" %}selected="selected"{% endif %}>冠心病:-0.191</option>
+    <option value=肿瘤:0.891 {% if p.noSurgery == "肿瘤:0.891" %}selected="selected"{% endif %}>肿瘤:0.891</option>
+    <option value=心脏骤停:0.393 {% if p.noSurgery == "心脏骤停:0.393" %}selected="selected"{% endif %}>心脏骤停:0.393</option>
+    <option value=心源性休克:-0.259 {% if p.noSurgery == "心源性休克:-0.259" %}selected="selected"{% endif %}>心源性休克:-0.259
+    </option>
+    <option value=主动脉夹层动脉瘤/胸、腹主动脉瘤破裂:0.731
+            {% if p.noSurgery == "主动脉夹层动脉瘤/胸、腹主动脉瘤破裂:0.731" %}selected="selected"{% endif %}>主动脉夹层动脉瘤/胸、腹主动脉瘤破裂:0.731
+    </option>
+    <option value=多发伤:-1.228 {% if p.noSurgery == "多发伤:-1.228" %}selected="selected"{% endif %}>多发伤:-1.228</option>
+    <option value=头部创伤:-0.517 {% if p.noSurgery == "头部创伤:-0.517" %}selected="selected"{% endif %}>头部创伤:-0.517</option>
+    <option value=癫痫:-0.584 {% if p.noSurgery == "癫痫:-0.584" %}selected="selected"{% endif %}>癫痫:-0.584</option>
+    <option value=颅内出血/硬膜下出血/蛛网膜下出血:0.723
+            {% if p.noSurgery == "颅内出血/硬膜下出血/蛛网膜下出血:0.723" %}selected="selected"{% endif %}>颅内出血/硬膜下出血/蛛网膜下出血:0.723
+    </option>
+    <option value=药物过量:-3.353 {% if p.noSurgery == "药物过量:-3.353" %}selected="selected"{% endif %}>药物过量:-3.353</option>
+    <option value=糖尿病酮症酸中毒:-1.507 {% if p.noSurgery == "糖尿病酮症酸中毒:-1.507" %}selected="selected"{% endif %}>
+        糖尿病酮症酸中毒:-1.507
+    </option>
+    <option value=消化道出血:0.334 {% if p.noSurgery == "消化道出血:0.334" %}selected="selected"{% endif %}>消化道出血:0.334</option>
+    <option value=代射性/肾脏:-0.885 {% if p.noSurgery == "代射性/肾脏:-0.885" %}selected="selected"{% endif %}>代射性/肾脏:-0.885
+    </option>
+    <option value=呼吸系统:-0.89 {% if p.noSurgery == "呼吸系统:-0.89" %}selected="selected"{% endif %}>呼吸系统:-0.89</option>
+    <option value=神经系统:-0.759 {% if p.noSurgery == "神经系统:-0.759" %}selected="selected"{% endif %}>神经系统:-0.759</option>
+    <option value=心血管系统:0.47 {% if p.noSurgery == "心血管系统:0.47" %}selected="selected"{% endif %}>心血管系统:0.47</option>
+    <option value=胃肠道系统:-0.501 {% if p.noSurgery == "胃肠道系统:-0.501" %}selected="selected"{% endif %}>胃肠道系统:-0.501
+    </option>
+</select>
+<br/>
+<label>手术类疾病:</label>
+<select name=surgery id=surgery {% if p.noSurgery %}disabled="disabled" {% endif %}>
+    <option value=></option>
+    <option value=多发伤:-1.684 {% if p.surgery == "多发伤:-1.684" %}selected="selected"{% endif %}>多发伤:-1.684</option>
+    <option value=慢性心血管疾病:-1.376 {% if p.surgery == "慢性心血管疾病:-1.376" %}selected="selected"{% endif %}>慢性心血管疾病:-1.376
+    </option>
+    <option value=外周血管手术:-1.315 {% if p.surgery == "外周血管手术:-1.315" %}selected="selected"{% endif %}>外周血管手术:-1.315
+    </option>
+    <option value=心瓣膜手术:-1.261 {% if p.surgery == "心瓣膜手术:-1.261" %}selected="selected"{% endif %}>心瓣膜手术:-1.261</option>
+    <option value=颅内肿瘤手术:-1.245 {% if p.surgery == "颅内肿瘤手术-1.245" %}selected="selected"{% endif %}>颅内肿瘤手术-1.245</option>
+    <option value=肾肿瘤手术:-1.204 {% if p.surgery == "肾肿瘤手术:-1.204" %}selected="selected"{% endif %}>肾肿瘤手术:-1.204</option>
+    <option value=肾移植:-1.042 {% if p.surgery == "肾移植:-1.042" %}selected="selected"{% endif %}>肾移植:-1.042</option>
+    <option value=脑外伤手术:-0.955 {% if p.surgery == "脑外伤手术:-0.955" %}selected="selected"{% endif %}>脑外伤手术:-0.955</option>
+    <option value=胸部外伤手术:-0.802 {% if p.surgery == "胸部外伤手术:-0.802" %}selected="selected"{% endif %}>胸部外伤手术:-0.802
+    </option>
+    <option value=颅内出血/硬膜下出血/蛛网膜下出血手术:-0.788
+            {% if p.surgery == "颅内出血/硬膜下出血/蛛网膜下出血手术:-0.788" %}selected="selected"{% endif %}>颅内出血/硬膜下出血/蛛网膜下出血手术:-0.788
+    </option>
+    <option value=椎板切除术或其他脊髓手术:-0.699 {% if p.surgery == "椎板切除术或其他脊髓手术:-0.699" %}selected="selected"{% endif %}>
+        椎板切除术或其他脊髓手术:-0.699
+    </option>
+    <option value=失血性休克:-0.682 {% if p.surgery == "失血性休克:-0.682" %}selected="selected"{% endif %}>失血性休克:-0.682</option>
+    <option value=胃肠道出血:-0.617 {% if p.surgery == "胃肠道出血:-0.617" %}selected="selected"{% endif %}>胃肠道出血:-0.617</option>
+    <option value=胃肠道肿瘤手术:-0.248 {% if p.surgery == "胃肠道肿瘤手术:-0.248" %}selected="selected"{% endif %}>胃肠道肿瘤手术:-0.248
+    </option>
+    <option value=术后呼吸功能不全:-0.14 {% if p.surgery == "术后呼吸功能不全:-0.14" %}selected="selected"{% endif %}>术后呼吸功能不全:-0.14
+    </option>
+    <option value=消化道穿孔或梗阻:0.06 {% if p.surgery == "消化道穿孔或梗阻:0.06" %}selected="selected"{% endif %}>消化道穿孔或梗阻:0.06
+    </option>
+    <option value=神经系统:-1.15 {% if p.surgery == "神经系统:-1.15" %}selected="selected"{% endif %}>神经系统:-1.15</option>
+    <option value=心血管系统:-0.797 {% if p.surgery == "心血管系统:-0.797" %}selected="selected"{% endif %}>心血管系统:-0.797</option>
+    <option value=呼吸系统:-0.61 {% if p.surgery == "呼吸系统:-0.61" %}selected="selected"{% endif %}>呼吸系统:-0.61</option>
+    <option value=胃肠道:-0.613 {% if p.surgery == "胃肠道:-0.613" %}selected="selected"{% endif %}>胃肠道:-0.613</option>
+    <option value=代谢或肾脏:-0.196 {% if p.surgery == "代谢或肾脏:-0.196" %}selected="selected"{% endif %}>代谢或肾脏:-0.196</option>
+</select>
+<label>是否急诊手术后:</label>
+<input style="width:30px" name="afterSurgery" class="afterSurgery" type=radio value=是:0.603
+       {% if p.afterSurgery == "是:0.603" %}checked="checked"{% endif %}>是:0.603</input>
+<input style="width:30px" name="afterSurgery" class="afterSurgery" type=radio value=否:0
+       {% if p.afterSurgery == "否:0" %}checked="checked"{% endif %}>否:0</input>
+<br/>
+<label>评分医师:</label>
+<select id=doctor name=doctor>
+    <option value={{ p.doctor }}>{{ p.doctor }}</option>
+    {% for workmate in workmates %}
+        <option value="{{ workmate }}">{{ workmate }}</option>
+    {% endfor %}
+</select>
+<label>评分时间:</label>
+<input style="width:220px" type="datetime-local" name="scoreTime" id=scoreTime
+       value="{{ p.scoreTime|date:'Y-m-d\TH:i' }}"/>
+
+
+<input id=errorInfo type="hidden" name="errorInfo" value=""/>
+<br/>
+<label>
+    <input type="button" onclick="submitInfo()" value="提交"/>
+</label>
+<label>
+    <input type="reset" value="重置"/>
+</label>
+
+</form>
+
+<style type="text/css">
+.red {
+	color: #F00;
+}
+</style>
+    <h3><br/>
+    <strong>填表说明:</strong></h3>
+<ul>
+  <li>评分医生及医院信息，需要点击<span class="red">登录用户名-&gt;修改用户信息，在其中设置公司，部门，同事</span>，这样才能正确填表</li>
+        <li>数据采集应为病人入ICU或抢救开始后<span class="red">24小时内最差值</span>，并注明具体评分时间。</li>
+        <li>呼吸频率应记录病人的自主呼吸频率，不考虑患者是否接受机械通气治疗。</li>
+        <li>“严重慢性病”是指住院前患者具有严重器官功能障碍或免疫功能受损病史，判定标准如下，具备一项即可：
+            <ul>
+                <li>①心——心功能Ⅳ级；</li>
+                <li>②肺——慢性缺氧，阻塞性或限制性通气障碍，运动耐力差；</li>
+                <li>③肾——正在接受慢性透析治疗；</li>
+                <li>④肝——肝活检证实有肝硬化及门脉高压；有门脉高压导致的上消化道出血史，或有肝功能衰竭/肝性脑病/肝昏迷病史；</li>
+                <li>⑤免疫损害：已经收受了可抑制抗感染能力的治疗，如免疫抑制剂、放疗、化疗、长期或大量激素治疗，或患有足以抑制抗感染能力的疾病，如白血病、淋巴瘤、爱滋病等。</li>
+            </ul>
+        </li>
+        <li>GCS神经功能评分，如果使用了镇静药物，应以镇静前的情况作为标准，如果没有可信的镇静前的资料，则视该项正常。</li>
+</ul>
+
+
+
+    <script>
+
+        {% if not p.scoreTime %}
+            //设置默认时间
+            $(document).ready(function () {
+                var time = new Date();
+                var day = ("0" + time.getDate()).slice(-2);
+                var month = ("0" + (time.getMonth() + 1)).slice(-2);
+                var hour = ("0" + (time.getHours())).slice(-2);
+                var min = ("0" + (time.getMinutes())).slice(-2);
+
+                var today = time.getFullYear() + "-" + (month) + "-" + (day) + "T" + hour + ":" + min;
+                $('#scoreTime').val(today);
+            })
+        {% endif %}
+
+
+
+        //手术类疾病和非手术类疾病为二选一，一个选择，另一个禁用
+        $("#surgery").change(
+            function () {
+                if ($("#surgery").val() == '') {
+                    $("#noSurgery").removeAttr("disabled");
+                } else {
+                    $("#noSurgery").attr("disabled", "disabled");
+                }
+            }//ends of func
+        );
+
+        $("#noSurgery").change(
+            function () {
+                if ($("#noSurgery").val() == '') {
+                    $("#surgery").removeAttr("disabled");
+                } else {
+                    $("#surgery").attr("disabled", "disabled");
+                }
+            }//ends of func
+        );
+
+
+        //为表单的元素添加失去焦点事件
+        $("form :input").blur(function () {
+            //姓名
+            if ($(this).is("#name")) {
+                var myReg = /^[\u4e00-\u9fa5]+$/;
+                //输入不大于3个字符，并且为中文
+                if ($(this).val().length < 2 || $(this).val().length > 4 || (!myReg.test($(this).val()))) {
+                    $("#nameInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#nameInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            //年龄
+            if ($(this).is("#age")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于120
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 120) {
+                    $("#ageInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#ageInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            //床号
+            if ($(this).is("#bedNumber")) {
+                //长度大于0
+                if ($(this).val().length < 1 || $(this).val().length > 10) {
+                    $("#bedNumberInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#bedNumberInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            //住院号
+            if ($(this).is("#inNumber")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且长度小于15
+                if ((!myReg.test($(this).val())) || $(this).val().length > 15) {
+                    $("#inNumberInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#inNumberInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            //体温
+            if ($(this).is("#temperature")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为数字，并且不大于42度
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 42) {
+                    $("#temperatureInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#temperatureInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            //收缩压
+            if ($(this).is("#SBP")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于300
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 300) {
+                    $("#SBPInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#SBPInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            //舒张压
+            if ($(this).is("#DBP")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于300
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 300) {
+                    $("#DBPInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#DBPInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            // HR
+            if ($(this).is("#HR")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于500
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 500) {
+                    $("#HRInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#HRInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            // R
+            if ($(this).is("#R")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于80
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 80) {
+                    $("#RInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#RInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            //WBC
+            if ($(this).is("#WBC")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为浮点数，并且范围限制
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 80) {
+                    $("#WBCInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#WBCInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            //HCT
+            if ($(this).is("#HCT")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为浮点数，并且范围限制
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 80) {
+                    $("#HCTInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#HCTInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            //pH
+            if ($(this).is("#pH")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为浮点数字，并且范围限制
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 8 || parseFloat($(this).val()) < 6) {
+                    $("#pHInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#pHInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            // FiO2
+            if ($(this).is("#FiO2")) {
+                //var myReg = /^[0-9]+$/;
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为数字，并且不大于80
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 100) {
+                    $("#FiO2Info").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#FiO2Info").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            // PaO2
+            if ($(this).is("#PaO2")) {
+                //var myReg = /^[0-9]+$/;
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 600) {
+                    $("#PaO2Info").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#PaO2Info").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            // PaCO2
+            if ($(this).is("#PaCO2")) {
+                //var myReg = /^[0-9]+$/;
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseFloat($(this).val()) > 200) {
+                    $("#PaCO2Info").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#PaCO2Info").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            // Na
+            if ($(this).is("#Na")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 190) {
+                    $("#NaInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#NaInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            // K
+            if ($(this).is("#K")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 10) {
+                    $("#KInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#KInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+
+            //Cr
+            if ($(this).is("#Cr")) {
+                var myReg = /^[0123456789]+[.]?[0123456789]*$/;
+                //输入为浮点数，无范围限制
+                if ((!myReg.test($(this).val()))) {
+                    $("#CrInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#CrInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+            // E
+            if ($(this).is("#E")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 4 || parseInt($(this).val()) < 1) {
+                    $("#EInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#EInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            // V
+            if ($(this).is("#V")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 5 || parseInt($(this).val()) < 1) {
+                    $("#VInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#VInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+            // M
+            if ($(this).is("#M")) {
+                var myReg = /^[0-9]+$/;
+                //输入为数字，并且不大于
+                if ((!myReg.test($(this).val())) || parseInt($(this).val()) > 6 || parseInt($(this).val()) < 1) {
+                    $("#MInfo").html("<strong style='color:red'>错误</strong>");
+                    $("#errorInfo").val("错误");
+                } else {
+                    $("#MInfo").html("");
+                    $("#errorInfo").val("");
+                }
+            }//
+
+        });//ends of func
+
+
+        //提交前检查信息
+        function checkInfo() {
+            //若存在出错信息
+            if ($("#errorInfo").val() == "错误") {
+                return "数据格式填写错误";
+            }
+
+
+            //同时存在手术与非手术不为空
+            if ($("#surgery").val() && $("#noSurgery").val()) {
+                return "入住主要疾病错误";
+            }
+            //存在手术,必问是否手术后
+            if ($("#surgery").val() != "" && $('input:radio[name="afterSurgery"]:checked').val() == null) {
+                return "手术疾病是否手术后未填写";
+            }
+            if ($("#name").val() == "" || $("#age").val() == "" || $("#bedNumber").val() == "" || $("#inNumber").val() == "" || $("#temperature").val() == "" || $("#SBP").val() == "" || $("#DBP").val() == "" || $("#HR").val() == "" || $("#R").val() == "" || $("#WBC").val() == "" || $("#HCT").val() == "" || $("#pH").val() == "" || $("#FiO2").val() == "" || $("#PaO2").val() == "" || $("#PaCO2").val() == "" || $("#Na").val() == "" || $("#K").val() == "" || $("#Cr").val() == "" || $('input:radio[name="AKI"]:checked').val() == null || $("#health").val() == "" || $("#E").val() == "" || $("#V").val() == "" || $("#M").val() == "" || $("#doctor").val() == "" || $("#scoreTime").val() == "") {
+                return "必填项不能为空";
+            }
+
+
+            return "YES";
+        }
+
+
+        //提交
+        function submitInfo() {
+            var errorInfo = checkInfo();
+            if (errorInfo == "YES") {
+                patient.submit();
+            } else {
+                alert("发现数据错误，请检查后重新填写\n" + errorInfo);
+            }
+        }
+
+
+    </script>
+{% endblock %}
+
+

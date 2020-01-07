@@ -1,0 +1,12 @@
+{% extends 'icu/base.html' %}
+
+{% block content %}
+
+    <a href="/icu/qc/edit/{{ qc.qcDate|date:"Y-m-d" }}">提交成功，稍后将跳转回</a>
+
+    <meta http-equiv="refresh" content="1;url=/icu/qc/edit/{{ qc.qcDate|date:"Y-m-d" }}">
+
+
+{% endblock %}
+
+

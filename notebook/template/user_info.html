@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6 main">
+
+<h1 class="page-header">用户信息</h1>
+
+<div class="panel panel-info">
+  <div class="panel-heading">用户名:</div>
+  <div class="panel-body">
+      {{ user.name }}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">电子邮箱:</div>
+  <div class="panel-body">
+      {{ user.email|default:"无" }}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">QQ:</div>
+  <div class="panel-body">
+    {{ user.qq|default:"无" }}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">微信:</div>
+  <div class="panel-body">
+    {{ user.wechat|default:"无" }}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">电话:</div>
+  <div class="panel-body">
+    {{ user.phone|default:"无" }}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">单位:</div>
+  <div class="panel-body">
+    {{ user.company|default:"无" }}
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">部门:</div>
+  <div class="panel-body">
+    {{ user.department|default:"无" }}
+    {% if user.departmentImg %}
+        <img height="100px" src=/static/images/department/{{ user.departmentImg }}></img>
+    {% endif %}
+
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <div class="panel-heading">同事:</div>
+  <div class="panel-body">
+    {{ user.workmate|default:"无" }}
+  </div>
+</div>
+
+
+
+        <a type="button" class="btn btn-info " href="/notebook/user/update_info">修改用户信息</a>
+
+    </div>
+{% endblock %} </p>

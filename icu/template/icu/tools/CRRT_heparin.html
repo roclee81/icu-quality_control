@@ -1,0 +1,149 @@
+{% extends 'icu/base.html' %}
+{% block content %}
+    <style type="text/css">
+        input {
+            width: 95px;
+            color: red;
+        }
+
+        label {
+            display: inline-block;
+            width: 120px;
+            text-align: right; /* 这句话是对齐的关键 */
+            color: #999;
+        }
+    </style>
+
+    CRRT 肝素计算公式：
+    <br/>
+    输入参数：
+    <br/>
+    <label>体&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;重:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+    <input id=weight type="text" onblur="weightCheck()" onFocus="this.value='' " name="weight" value=60 size=5/> Kg
+    <br/>
+    <label>肝素用量:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input id=heparinDoes type="text" name="heparinDoes" value=12500 size=5/> u
+    <br/>
+    <label>液体总量: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input id=water type="text" name="water" value=50 size=5/> ml
+    <br/>
+    <label>当前肝素泵速:</label>
+    <input id=speedNow type="text" name="speedNow" size=5> ml/h
+    <br/>
+    <label>新测血APTT:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input id=aptt type="text" name="aptt" size=5> sec
+
+
+    <br/>  <input type="button" onclick="calculate()" value="开始计算"/>
+
+    <div id=result></div>
+    <p>
+    <br/>
+    ==================================
+    <br/>
+    根据推荐计算方案:
+    <br/>
+    APTT &lt;35 肝素增加4u/kg.h
+    <br/>
+    APTT 35-45 肝素增加2u/kg.h
+    <br/>
+    APTT 46-70 不调整用量
+    <br/>
+    APTT 71-90 肝素减少2u/kg.h
+    <br/>
+    APTT &gt;90 先暂停1小时后，肝素减少3u/kg.h
+    <br/>
+    ==================================
+
+
+
+    <script>
+
+        /*#检查体重数据，如果为空，则默认为60*/
+        function weightCheck() {
+            if ($("#weight").val() == "") {
+                $("#weight").val(60);
+            }
+
+            weight = parseFloat($("#weight").val());
+            if ((weight <= 0) || (weight > 300)) {
+                alert("体重输入有误！");
+            }
+        }
+
+
+        //进行计算并给出结果到div id=result中去
+        function calculate() {
+            var weight = parseFloat($("#weight").val());
+            var heparinDoes = parseFloat($("#heparinDoes").val());
+            var water = parseFloat($("#water").val());
+            var speedNow = parseFloat($("#speedNow").val());
+            var aptt = parseFloat($("#aptt").val());
+
+            //检查目前的肝素泵速度是否正确
+            if (speedNow == 0 || (!speedNow)) {
+                alert("请输入目前肝素泵速度！");
+                return;
+            }
+
+            //保存结果文本
+            var result = ""
+
+            // 需要增加的肝素量 u/kg.h
+            var addon = 0.0;
+
+            if (aptt < 35) {
+                addon = 4.0;
+            } else if (aptt >= 35 && aptt <= 45) {
+                addon = 2.0;
+            } else if (aptt >= 71 && aptt <= 90) {
+                addon = -2.0;
+            } else if (aptt > 90) {
+                addon = -3.0;
+            } else if (aptt == 0 || (!aptt)) {
+                alert("请输入正确的APTT值！");
+                return;
+            }
+
+
+            //肝素浓度 单位 u/ml
+            var concentration = heparinDoes / water
+            result += "<br />患者目前的肝素配制浓度为：" + heparinDoes + "/" + water + "=" + concentration + "u/ml";
+            result += "<br />根据患者新测的APTT值:" + aptt + "sec," + "患者需要增加的肝素剂量为：" + addon + "u/kg.h";
+            //addonDoes 根据体重计算需要增加的单位 u/h
+            var addonDoes = addon * weight
+            result += "<br />患者" + weight + "kg体重需要增加的肝素剂量为：" + addon + "*" + weight + "=" + addonDoes + "u/h";
+
+            //addonMl 需要增加的ml数 ml/h
+            var addonMl = addonDoes / concentration
+            result += "<br />患者重需要增加的肝素ml数为：" + addonDoes + "/" + concentration + "=" + addonMl + "ml/h";
+
+            //newSpeed 计算后需要设置的肝素泵速度
+            var newSpeed = speedNow + addonMl
+            //如果aptt > 90,先暂停
+            if (aptt > 90) {
+                result += "<br /><div class=\"text-danger\" >患者血APTT大于90s，肝素应该先暂停1小时后再泵入。</div>"
+            } else {
+                result += "<br />"
+            }
+            result += "<div class=\"text-info\">患者现在应设置的肝素速度数为：" + speedNow + "+" + addonMl + "=" + newSpeed + "ml/h</div>";
+
+
+            $("#result").html(result);
+
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+

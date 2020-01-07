@@ -1,0 +1,56 @@
+
+
+
+<div class="row" style="margin:0px;">
+
+    <!--搜索框-->
+    <script type="text/javascript">
+    //按下回车即搜索
+      function keyup_submit(e){ 
+       var evt = window.event || e; 
+          //回车事件
+        if (evt.keyCode == 13){
+          //  alert("回车");
+            $.get('/notebook/note/search/' + $("input[name='search_topic']:checked").val() + '/' + $("#search_box").val(), function (result) {
+                $("#ul_0").html(result);
+            });
+        }
+      }
+    </script>
+    <div style="float:left">
+        <input type="radio" name="search_topic" value="title" checked>搜标题
+        <input type="radio" name="search_topic" value="all">全文
+    </div>
+    <div style="float:left">
+        <input type="text" id="search_box" class="form-control" style="height:25px;width:200px"
+                        onkeydown="keyup_submit(event);"  placeholder="请输入搜索关键字后回车" / >
+    </div>
+    <!--ends of 搜索框-->
+
+    <div class="row" style="clear:both;margin:0px;">
+        <hr style="margin-bottom:10px;margin-top:10px;background-color:#1196EE;height:1px;">
+    </div>
+    <!--信息框-->
+    <div class="row" style="clear:both;margin-left:0px;margin-bottom:10px;">
+        <div title="新建目录" onclick="form_note_create(this,0,0)" class="add_dir btn_tree" style="float:left"></div>
+        <div title="新建笔记" onclick="form_note_create(this,0,1)" class="add_note btn_tree" style="float:left"></div>
+        目录数:{{count.dir}}
+        <div style="float:left">&nbsp;|&nbsp;</div>
+        笔记数:{{count.file}}
+
+    </div>
+    <!--ends of 信息框-->
+
+
+
+<div class="border border-primary" style="border:solid 1px #1196EE;border-radius: 4px 4px 4px 4px;">
+    <ul ondragenter="dragEnter(event,this)" ondragleave="dragLeave(event,this)" ondrop="drop(event,this)"
+        ondragover="dragOver(event,this)" class="ful" style="padding-top:5px;padding-bottom:5px;" id="ul_0">
+        {% include 'list.html' %}
+    </ul>
+</div>
+
+<br/>
+<br/>
+<br/>
+</div>

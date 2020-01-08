@@ -2,6 +2,8 @@
 重症医学科在线工具集
 
 示例网站：[http://linux.zicp.vip/icu/]
+[http://yifan.qicp.vip/icu/]
+[http://dhs789520.vicp.net/icu/]
 
 重症医学是一个最容易产生数据的学科:
 

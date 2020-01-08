@@ -14,6 +14,7 @@ import time
 import functools
 import requests
 
+
 #用户行为日志装饰器
 def log(func):
     @functools.wraps(func)
@@ -29,20 +30,21 @@ def log(func):
         return func(request, *args,**kw)
     return wrapper
 
-#用户登录装饰器
+
+# 用户登录装饰器
 def login(func):
     @functools.wraps(func)
     def wrapper(*args,**kw):
-        #将request传入包装器内，以便查询用户登录session
+        # 将request传入包装器内，以便查询用户登录session
         request = args[0]
-        #如果没有登录，跳转到登录页面
+        # 如果没有登录，跳转到登录页面
         if not request.session.get('uid',0):
             request.session['referrerUrl'] = request.path
             return HttpResponseRedirect("/notebook/user/login")
-        #提取登录的用户信息
+        # 提取登录的用户信息
         user=User.objects.get(id=request.session['uid'])
-        #如果已经登录，执行请求的函数
-        #将登录用户信息 user作为参数添加进去
+        # 如果已经登录，执行请求的函数
+        # 将登录用户信息 user作为参数添加进去
         return func(*args,**kw,user=user)
     return wrapper
 
@@ -52,7 +54,7 @@ def index_jump(request,user):
 
 # help信息
 def help(request):
-    #显示note主体内容
+    # 显示note主体内容
     return render(request,'help.html')
 
 # 404页面
@@ -82,73 +84,24 @@ def index(request,user):
     #每日一句api
     #sentence = requests.get("http://open.iciba.com/dsapi/").json()
     id = random.randint(1,30014)
-    sentence = Fortune.objects.get(id=id).content
+    try:
+        sentence = Fortune.objects.get(id=id).content
+
+    except Exception as e:
+        sentence = """志在顶峰的人，决不会因留恋半山腰的奇花异草而停止攀登的步伐。 
+                     - 高尔基"""
     sentence = re.sub("\n","<P>",sentence)
     sentence = re.sub(r"\x1b\x5b\d+m","&nbsp;&nbsp",sentence)
     sentence = re.sub(r"\x1b\x5bm","",sentence)
-
     return render(request,'index.html',{'count':count, 'notes':notes, 'user':user, 'basedir_id':0, 'sentence':sentence})
 
 def favicon(request):
-    image_data = open("static/favicon.ico","rb").read()   
+    image_data = open("static/favicon.ico", "rb").read()
     return HR(image_data,content_type="image/ico")
 
-#下载数据库功能
+#
 def data_test(request):
-    #先登录
-    #if not request.session.get('uid',0):
-        #request.session['referrerUrl'] = request.path
-        #return HttpResponseRedirect("/notebook/user/login")
-
-    #user=User.objects.get(id=request.session['uid'])
-    #非管理员，直接返回，不允许执行命令
-    #if user.name != 'dhs':
-        #return HR('user:%s you win !'%user.name)
-
-    tempPath = os.path.join(BASE_DIR,"static/temp/")
-    cmdFile = "cmd"
-
-    from subprocess import Popen
-    #重启电脑命令
-    if request.GET.get('cmd','0') == 'reboot':
-        Popen('shutdown -r -t 0',shell=True)
-        return HR('cmd reboot OK')
-    #重启Apache服务器
-    elif request.GET.get('cmd','0') == 'restartServer':
-        #Apache mod_wsgi目前不能执行进程程序，只能曲线救国，写入本地cmd文件
-        #让本地执行
-        with open(tempPath+cmdFile,'w') as fd:
-            fd.write('restartServer')
-        return HR('cmd restartServer OK')
-    # git Pull
-    elif request.GET.get('cmd','0') == 'gitPull':
-        #Apache mod_wsgi目前不能执行进程程序，只能曲线救国，写入本地cmd文件
-        #让本地执行
-        with open(tempPath+cmdFile,'w') as fd:
-            fd.write('gitPull')
-        return HR('cmd gitPull OK')
-    # migrate
-    elif request.GET.get('cmd','0') == 'migrate':
-        Popen('python manage.py migrate',shell=True)
-        return HR('cmd migrate OK')
-    # grab
-    elif request.GET.get('cmd','0') == 'grab':
-        #from PIL import ImageGrab,Image
-        #img = ImageGrab.grab()        #实现截屏功能
-        #w,h =img.size
-        #img =img.resize((int(w/2),int(h/2)),Image.ANTIALIAS)
-        #img.save('static/temp/grab.png','PNG') #设置保存路径和图片格式
-
-        #Apache mod_wsgi目前不能执行进程程序，只能曲线救国，写入本地cmd文件
-        #让本地执行
-        with open(tempPath+cmdFile,'w') as fd:
-            fd.write('grab')
-        return HR('<img src="/static/temp/grab.png?%s">'%str(time.time()))
-
-
-
-    #下载数据库
-    elif request.GET.get('cmd','0') == 'dhsdjango':
+    if request.GET.get('cmd','0') == 'dhsdjango':
         def file_iterator(file_name, chunk_size=512):
             with open(os.path.join(BASE_DIR,file_name),"rb") as f:
                 while True:
@@ -168,7 +121,7 @@ def data_test(request):
 
 
 #初始化数据库，增加一个用户，以免新建代码仓库查询时出现无用户错误
-def init(request,name='test'): 
+def init(request,name='icu'):
     try:
         user=User.objects.create(name=name)
     except:
@@ -214,7 +167,7 @@ def init(request,name='test'):
             content = "<p>抛开复杂，让它帮我们记住更多锁事。提醒功能在开发中……</p>",
             basedir_id = 0,
             note_type=1)
-    return 
+    return HR("初始化用户%s创建成功！"%name)
 
 
 #根据id，返回笔记内容

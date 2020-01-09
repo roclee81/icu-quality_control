@@ -5,6 +5,11 @@
 [http://yifan.qicp.vip/icu/]
 [http://dhs789520.vicp.net/icu/]
 
+![avatar](http://linux.zicp.vip/static/images/wxgzh.bmp)
+重症医学质量控制 
+微信号
+icu789520
+
 重症医学是一个最容易产生数据的学科:
 
 患者的每一次心率、脉氧变化最终都会产生大量的数据
